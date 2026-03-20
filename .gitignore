@@ -17,3 +17,4 @@ venv.bak/
 # Google Drive MCP token and credentials
 token.json
 credentials.json
+.bash_history
