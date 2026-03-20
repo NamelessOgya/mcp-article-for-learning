@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+pytest_cache/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Google Drive MCP token and credentials
+token.json
+credentials.json
