@@ -38,6 +38,24 @@ def get_secret() -> str:
     response = client.access_secret_version(request={"name": name})
     return response.payload.data.decode("UTF-8")
 
+def get_raw_secret(secret_id_env_key: str, default_secret_id: str) -> str:
+    """
+    指定された環境変数の設定値（シークレット名）を使って、Secret Managerから生の値を取得する汎用関数
+    """
+    project_id = os.getenv("GCP_PROJECT_ID")
+    secret_id = os.getenv(secret_id_env_key, default_secret_id)
+    
+    if not project_id:
+        return None
+        
+    try:
+        client = secretmanager.SecretManagerServiceClient()
+        name = f"projects/{project_id}/secrets/{secret_id}/versions/latest"
+        response = client.access_secret_version(request={"name": name})
+        return response.payload.data.decode("UTF-8")
+    except Exception:
+        return None
+
 # 使い方
 if __name__ == "__main__":    
     api_key = get_secret()
