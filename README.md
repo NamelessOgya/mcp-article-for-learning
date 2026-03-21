@@ -70,6 +70,13 @@ DRIVE_CREDENTIALS_SECRET_ID=drive-credentials
 ALLOWED_DRIVE_FOLDER_NAME=article-for-learning
 ```
 
+### 【必須】Google Drive MCPを利用する場合のドライブ側準備
+Google Drive MCPを動かすためには、セキュリティ担保のため、ご自身のGoogle Drive側に「LLMにアクセスさせてもよい専用の隔離フォルダ」を作り、サービスアカウントを招待する必要があります。
+
+1. **専用フォルダの作成**: ご自身のGoogle Drive内に、LLMに操作・閲覧を許可するフォルダ（例：`article-for-learning`）を新規作成します。
+2. **アクセス権（共有）の付与**: 作成したフォルダの「共有」ボタンを押し、今回利用するGCPサービスアカウントのメールアドレス（`〇〇@〇〇.iam.gserviceaccount.com` 等）を入力し、「編集者」として追加（招待）します。
+3. **環境変数への登録**: 上記の環境変数 `ALLOWED_DRIVE_FOLDER_NAME` に、作成したフォルダの一言一句違わぬ正確な名前を設定してください。これにより、指定フォルダ以外のプライベートなファイルへのアクセスを完全に遮断できます。
+
 ---
 
 ## 4. 学習のステップ (Playground)
