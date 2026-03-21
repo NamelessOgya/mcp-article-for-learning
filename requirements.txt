@@ -7,3 +7,4 @@ pytest
 google-cloud-secret-manager
 google-genai
 python-dotenv
+arxiv
