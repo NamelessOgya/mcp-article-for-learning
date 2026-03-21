@@ -19,7 +19,12 @@ class GeminiMCPClient:
     def _log(self, text: str):
         """verboseがTrueの場合のみコンソールにメッセージを出力するヘルパー"""
         if self.verbose:
-            print(text)
+            text_str = str(text)
+            if len(text_str) > 1500:
+                # ターミナルが埋め尽くされるのを防ぐため、長すぎるログは最初と最後だけ表示して中略する
+                print(text_str[:800] + "\n\n... (中略: 長すぎるためコンソールへの出力は制限しています) ...\n\n" + text_str[-300:])
+            else:
+                print(text_str)
 
     @staticmethod # インスタンス変数を一切使わない関数につけるらしい。へー
     def _mcp_to_gemini_tool(mcp_tool) -> dict:
@@ -85,7 +90,10 @@ class GeminiMCPClient:
                         )
                         # 実行結果を取り出す
                         result_text = result.content[0].text
-                        self._log(f"✅ 実行結果（この結果を再びAIに教えます）: {result_text}")
+                        
+                        # コンソール出力用（長すぎる場合は省略して表示）
+                        display_text = result_text if len(result_text) < 300 else result_text[:300] + "\n... (以下長すぎるためコンソール出力は省略) ..."
+                        self._log(f"✅ 実行結果（この結果を再びAIに教えます）: {display_text}")
                         
                         # AIに返すための「ツールの実行結果報告」フォーマット（Part）を作成
                         function_responses.append(

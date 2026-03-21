@@ -25,13 +25,30 @@ def test_download_existing_paper():
     # 有名な論文でテスト（例：Attention Is All You Need）
     result = download_arxiv_paper("Attention Is All You Need")
     
-    assert "ダウンロード成功" in result
+    assert "抽出されたTeXソースコードの全内容です" in result
     assert "Attention Is All You Need" in result
     
-    # ファイルが実際に保存されたか確認
-    files = os.listdir(BASE_DIR)
-    assert len(files) > 0
-    assert any(f.endswith(".pdf") for f in files)
+    # PDFファイルが実際に保存されたか確認
+    pdf_dir = os.path.join(BASE_DIR, "pdf")
+    assert os.path.exists(pdf_dir)
+    pdf_files = os.listdir(pdf_dir)
+    assert any(f.endswith(".pdf") for f in pdf_files)
+
+    # TeXソースファイルが展開先のディレクトリとして実際に保存されたか確認
+    tex_dir = os.path.join(BASE_DIR, "tex")
+    assert os.path.exists(tex_dir)
+    extracted_dirs = [d for d in os.listdir(tex_dir) if os.path.isdir(os.path.join(tex_dir, d))]
+    assert len(extracted_dirs) > 0
+    # 中身が存在することを確認
+    extracted_path = os.path.join(tex_dir, extracted_dirs[0])
+    extracted_files = os.listdir(extracted_path)
+    assert len(extracted_files) > 0
+
+    # raw_textとして結合テキストが保存されたか確認
+    raw_text_dir = os.path.join(BASE_DIR, "raw_text")
+    assert os.path.exists(raw_text_dir)
+    raw_text_files = os.listdir(raw_text_dir)
+    assert any(f.endswith(".txt") for f in raw_text_files)
 
 def test_download_nonexistent_paper():
     # 存在しないであろうデタラメなタイトルで検索

@@ -110,6 +110,16 @@ python playground/02_gemini_react_agent.py
 python playground/03_gemini_drive_agent.py
 ```
 
+### Step 4: `04_gemini_arxiv_agent.py`
+**「LLMがarXivから論文のソースコードを取得し、解釈する」**
+自作の「ArXiv MCPサーバー (`src/mcp/arxiv_mcp.py`)」に接続し、Geminiに「arXivから『Attention Is All You Need』という論文をダウンロードして」と指示を出します。
+MCPツールが裏側で自動的にPDFとTeXソースのダウンロード・解凍展開・テキストデータの結合を行い、論文の全テキストを直接LLMに渡す（透過的なデータ抽出機構）を体験できます。
+
+```bash
+python playground/04_gemini_arxiv_agent.py
+```
+※ 抽出されたPDF、TeXファイル群、結合済みテキスト（`raw_text`）は、リポジトリ内の `tmp/arxiv/` フォルダに出力されます。
+
 ---
 
 ## 5. テストの実行
