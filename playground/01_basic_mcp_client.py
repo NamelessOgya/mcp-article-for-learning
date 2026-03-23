@@ -8,7 +8,7 @@ async def main():
     import os
     server_params = StdioServerParameters(
         command="python",
-        args=[os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src", "mcp", "local_fs_mcp.py")],
+        args=[os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src", "mcp", "local_fs", "local_fs_mcp.py")],
     )
 
     print("MCPサーバーを起動し、接続しています...")

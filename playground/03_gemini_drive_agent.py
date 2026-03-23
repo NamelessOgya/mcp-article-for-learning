@@ -29,7 +29,7 @@ async def main():
     server_params = StdioServerParameters(
         command="python",
         # プロジェクトルートからの構成に合わせて絶対パスを動的生成
-        args=[os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src", "mcp", "google_drive_mcp.py")],
+        args=[os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src", "mcp", "google_drive", "google_drive_mcp.py")],
     )
 
     print("🔌 Google Drive MCPサーバーを起動し、接続しています...")

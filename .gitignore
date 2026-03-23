@@ -4,6 +4,9 @@ tmp/
 pytest_cache/
 *.py[cod]
 *$py.class
+.cache/
+.local/
+.pytest_cache/
 
 # Environments
 .env

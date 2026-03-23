@@ -8,13 +8,13 @@ import re
 # srcディレクトリをパスに追加
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.mcp.google_drive_mcp import download_drive_file, list_drive_files, BASE_DIR
+from src.mcp.google_drive.google_drive_mcp import download_drive_file, list_drive_files, BASE_DIR
 
-@patch('src.mcp.google_drive_mcp.verify_safe_file', return_value=True)
-@patch('src.mcp.google_drive_mcp.get_allowed_folder_id', return_value='allowed_root')
-@patch('src.mcp.google_drive_mcp.get_drive_service')
-@patch('src.mcp.google_drive_mcp.MediaIoBaseDownload')
-@patch('src.mcp.google_drive_mcp.io.FileIO')
+@patch('src.mcp.google_drive.google_drive_mcp.verify_safe_file', return_value=True)
+@patch('src.mcp.google_drive.google_drive_mcp.get_allowed_folder_id', return_value='allowed_root')
+@patch('src.mcp.google_drive.google_drive_mcp.get_drive_service')
+@patch('src.mcp.google_drive.google_drive_mcp.MediaIoBaseDownload')
+@patch('src.mcp.google_drive.google_drive_mcp.io.FileIO')
 def test_download_google_doc(mock_file_io, mock_downloader, mock_get_service, mock_get_allowed, mock_verify):
     # Drive APIサービスのモック
     mock_service = MagicMock()
@@ -50,11 +50,11 @@ def test_download_google_doc(mock_file_io, mock_downloader, mock_get_service, mo
     assert "Test Document.txt" in result
 
 
-@patch('src.mcp.google_drive_mcp.verify_safe_file', return_value=True)
-@patch('src.mcp.google_drive_mcp.get_allowed_folder_id', return_value='allowed_root')
-@patch('src.mcp.google_drive_mcp.get_drive_service')
-@patch('src.mcp.google_drive_mcp.MediaIoBaseDownload')
-@patch('src.mcp.google_drive_mcp.io.FileIO')
+@patch('src.mcp.google_drive.google_drive_mcp.verify_safe_file', return_value=True)
+@patch('src.mcp.google_drive.google_drive_mcp.get_allowed_folder_id', return_value='allowed_root')
+@patch('src.mcp.google_drive.google_drive_mcp.get_drive_service')
+@patch('src.mcp.google_drive.google_drive_mcp.MediaIoBaseDownload')
+@patch('src.mcp.google_drive.google_drive_mcp.io.FileIO')
 def test_download_regular_pdf(mock_file_io, mock_downloader, mock_get_service, mock_get_allowed, mock_verify):
     # Drive APIサービスのモック
     mock_service = MagicMock()
@@ -85,9 +85,9 @@ def test_download_regular_pdf(mock_file_io, mock_downloader, mock_get_service, m
     mock_service.files().get_media.assert_called_once_with(fileId='987654321')
     assert "research_paper.pdf" in result
 
-@patch('src.mcp.google_drive_mcp.verify_safe_file', return_value=True)
-@patch('src.mcp.google_drive_mcp.get_allowed_folder_id', return_value='allowed_root')
-@patch('src.mcp.google_drive_mcp.get_drive_service')
+@patch('src.mcp.google_drive.google_drive_mcp.verify_safe_file', return_value=True)
+@patch('src.mcp.google_drive.google_drive_mcp.get_allowed_folder_id', return_value='allowed_root')
+@patch('src.mcp.google_drive.google_drive_mcp.get_drive_service')
 def test_list_drive_files(mock_get_service, mock_get_allowed, mock_verify):
     # Drive APIサービスのモック
     mock_service = MagicMock()
@@ -114,10 +114,10 @@ def test_list_drive_files(mock_get_service, mock_get_allowed, mock_verify):
     assert "📄 ファイル" in result
 
 
-@patch('src.mcp.google_drive_mcp.get_allowed_folder_id', return_value='allowed_folder_id')
-@patch('src.mcp.google_drive_mcp.get_drive_service')
-@patch('src.mcp.google_drive_mcp.MediaIoBaseDownload')
-@patch('src.mcp.google_drive_mcp.io.FileIO')
+@patch('src.mcp.google_drive.google_drive_mcp.get_allowed_folder_id', return_value='allowed_folder_id')
+@patch('src.mcp.google_drive.google_drive_mcp.get_drive_service')
+@patch('src.mcp.google_drive.google_drive_mcp.MediaIoBaseDownload')
+@patch('src.mcp.google_drive.google_drive_mcp.io.FileIO')
 def test_download_allowed_file(mock_file_io, mock_downloader, mock_get_service, mock_get_allowed):
     """
     指定階層（article-for-learning 等の allowed_folder_id）の配下にある test.md のダウンロードが
@@ -163,8 +163,8 @@ def test_download_allowed_file(mock_file_io, mock_downloader, mock_get_service, 
     assert "test.md" in result
 
 
-@patch('src.mcp.google_drive_mcp.get_allowed_folder_id', return_value='allowed_folder_id')
-@patch('src.mcp.google_drive_mcp.get_drive_service')
+@patch('src.mcp.google_drive.google_drive_mcp.get_allowed_folder_id', return_value='allowed_folder_id')
+@patch('src.mcp.google_drive.google_drive_mcp.get_drive_service')
 def test_download_rejected_file(mock_get_service, mock_get_allowed):
     """
     許可された階層の外（はるか上のルートなど）にある test.md をダウンロードしようとした時に、
@@ -211,8 +211,8 @@ def test_actual_network_download():
     os.makedirs(test_dir, exist_ok=True)
     
     # srcモジュールの BASE_DIR だけを一時的にパッチして、保存先を tmp/test に差し替える
-    with patch('src.mcp.google_drive_mcp.BASE_DIR', test_dir):
-        from src.mcp.google_drive_mcp import list_drive_files, download_drive_file
+    with patch('src.mcp.google_drive.google_drive_mcp.BASE_DIR', test_dir):
+        from src.mcp.google_drive.google_drive_mcp import list_drive_files, download_drive_file
         
         # 2. 実際のDriveにアクセスし「test.md」という名前のファイルが存在するか検索する
         list_result = list_drive_files()

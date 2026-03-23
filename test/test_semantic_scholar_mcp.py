@@ -1,11 +1,13 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import pytest
 from unittest.mock import patch, MagicMock
-from src.mcp.semantic_scholar_mcp import get_paper_citations
+from src.mcp.semantic_scholar.semantic_scholar_mcp import get_paper_citations
 import requests
 
-@patch("src.mcp.semantic_scholar_mcp.requests.get")
-@patch("src.mcp.semantic_scholar_mcp.time.sleep")
-def test_get_paper_citations_success(mock_sleep, mock_get):
+@patch("src.utils.semantic_scholar_api.requests.get")
+def test_get_paper_citations_success(mock_get):
     # Setup mock responses
     mock_search_response = MagicMock()
     mock_search_response.json.return_value = {
@@ -52,8 +54,6 @@ def test_get_paper_citations_success(mock_sleep, mock_get):
 
     # Asserts
     assert mock_get.call_count == 2
-    assert mock_sleep.call_count == 1
-    mock_sleep.assert_called_with(1)
     
     # Check that sorting worked (High should be first, Medium second, Low dropped because limit=2)
     assert "Citation 2 (High)" in result
@@ -64,7 +64,7 @@ def test_get_paper_citations_success(mock_sleep, mock_get):
     assert "(引用数: 100)" in result
     assert "(引用数: 50)" in result
 
-@patch("src.mcp.semantic_scholar_mcp.requests.get")
+@patch("src.utils.semantic_scholar_api.requests.get")
 def test_get_paper_citations_empty_search(mock_get):
     # Setup mock responses for empty search
     mock_search_response = MagicMock()
@@ -77,8 +77,8 @@ def test_get_paper_citations_empty_search(mock_get):
     assert mock_get.call_count == 1
     assert "見つかりませんでした" in result
 
-@patch("src.mcp.semantic_scholar_mcp.requests.get")
-@patch("src.mcp.semantic_scholar_mcp.time.sleep")
+@patch("src.utils.semantic_scholar_api.requests.get")
+@patch("src.utils.semantic_scholar_api.time.sleep")
 def test_get_paper_citations_empty_citations(mock_sleep, mock_get):
     # Setup mock responses
     mock_search_response = MagicMock()

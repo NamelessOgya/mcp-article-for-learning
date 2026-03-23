@@ -6,7 +6,7 @@ import sys
 # local_fs_mcp モジュールをインポートするためにパスを追加
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.mcp.local_fs_mcp import write_file, read_file, list_workspace_files, BASE_DIR
+from src.mcp.local_fs.local_fs_mcp import write_file, read_file, list_workspace_files, BASE_DIR
 
 @pytest.fixture(autouse=True)
 def setup_and_teardown():

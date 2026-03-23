@@ -14,17 +14,23 @@ from mcp.server.fastmcp import FastMCP
 
 mcp = FastMCP("GoogleDrive")
 
+import yaml
+
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+_config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.yaml")
+with open(_config_path, "r", encoding="utf-8") as f:
+    _gd_config = yaml.safe_load(f) or {}
+
 # ダウンロードなど読み取り機能のみを許可する安全なスコープ
-SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
+SCOPES = _gd_config.get("SCOPES", ['https://www.googleapis.com/auth/drive.readonly'])
 
 # 認証情報の格納場所とダウンロード先
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-CREDENTIALS_FILE = os.path.join(PROJECT_ROOT, 'credentials.json')
-TOKEN_FILE = os.path.join(PROJECT_ROOT, 'token.json')
-BASE_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, "tmp"))
+CREDENTIALS_FILE = os.path.join(PROJECT_ROOT, _gd_config.get("CREDENTIALS_FILE_REL", 'credentials.json'))
+TOKEN_FILE = os.path.join(PROJECT_ROOT, _gd_config.get("TOKEN_FILE_REL", 'token.json'))
+BASE_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, _gd_config.get("BASE_DIR_REL", "tmp")))
 
 # セキュリティ対策: 許可するルートフォルダ名 (この中身しか操作できないようにする)
-ALLOWED_FOLDER_NAME = os.getenv("ALLOWED_DRIVE_FOLDER_NAME", "研究計画かすみん")
+ALLOWED_FOLDER_NAME = os.getenv("ALLOWED_DRIVE_FOLDER_NAME", _gd_config.get("ALLOWED_FOLDER_NAME", "研究計画かすみん"))
 
 def get_drive_service():
     """Google Drive APIへの認証を通し、サービスインスタンスを返す"""

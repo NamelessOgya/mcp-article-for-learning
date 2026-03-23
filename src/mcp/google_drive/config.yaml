@@ -1,0 +1,6 @@
+SCOPES:
+  - "https://www.googleapis.com/auth/drive.readonly"
+CREDENTIALS_FILE_REL: "credentials.json"
+TOKEN_FILE_REL: "token.json"
+BASE_DIR_REL: "tmp"
+ALLOWED_FOLDER_NAME: "研究計画かすみん"

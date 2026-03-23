@@ -6,8 +6,14 @@ mcp = FastMCP("LocalFileSystem")
 
 # 操作を許可するベースディレクトリ (このディレクトリ配下のみ操作可能とする安全対策)
 # src/mcp/local_fs_mcp.py からプロジェクトルートの tmp ディレクトリを指すように修正
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-BASE_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, "tmp"))
+import yaml
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+_config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.yaml")
+with open(_config_path, "r", encoding="utf-8") as f:
+    _lf_config = yaml.safe_load(f) or {}
+
+BASE_DIR_REL = _lf_config.get("BASE_DIR_REL", "tmp")
+BASE_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, BASE_DIR_REL))
 os.makedirs(BASE_DIR, exist_ok=True)
 
 

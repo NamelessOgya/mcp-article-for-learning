@@ -1,5 +1,5 @@
 """
-python playground/05_gemini_semantic_scholar_agent.py
+python playground/06_gemini_article_graph_agent.py
 """
 import asyncio
 import sys
@@ -15,42 +15,42 @@ from src.llm.gcp.gemini_client import GeminiMCPClient
 
 
 async def main():
-    print("=== Semantic Scholarから論文の引用文献をMCP経由で取得するテスト ===")
+    print("=== Article Graph MCPを使って特定の論文の引用関係を分析するテスト ===")
     
     # 1. APIキーを取得して汎用LLMクライアント(GeminiMCPClient)を初期化
     try:
         api_key = get_secret()
-        # 今回作成したクラスをインスタンス化（動作理解のためverbose=Trueで詳細な推論ログを出力）
+        # 動作理解のためverbose=Trueで詳細な推論ログを出力
         llm_client = GeminiMCPClient(api_key=api_key, model_name="gemini-2.5-flash", verbose=True)
     except Exception as e:
         print(f"APIキーの取得等でエラーが発生しました: {e}")
         return
 
-    # 2. Semantic Scholar MCPサーバーの起動パラメータを設定
+    # 2. Article Graph MCPサーバーの起動パラメータを設定
     server_params = StdioServerParameters(
         command="python",
-        # プロジェクトルートからの相対パス、または絶対パスで最新の配置場所を指定
-        args=[os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src", "mcp", "semantic_scholar", "semantic_scholar_mcp.py")],
+        # プロジェクトルートからの相対パス、または絶対パスで配置場所を指定
+        args=[os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src", "mcp", "article_graph", "article_graph_mcp.py")],
     )
 
-    print("🔌 Semantic Scholar MCPサーバーを起動し、接続しています...")
+    print("🔌 Article Graph MCPサーバーを起動し、接続しています...")
     # 3. サーバーと接続してセッションを確立
     async with stdio_client(server_params) as (read, write):
         async with ClientSession(read, write) as session:
             await session.initialize()
             print("✅ MCPサーバーとの接続が完了しました。\n")
 
-            # 4. ユーザーから検索したい論文名を受け取る
+            # 4. ユーザーから分析対象の論文名を受け取る
             try:
-                user_input = input("🔍 検索したい論文名を入力してください (Enterでデフォルト: 'Attention Is All You Need'): ").strip()
+                user_input = input("🔍 分析したい対象論文名を入力してください (Enterでデフォルト: 'Attention Is All You Need'): ").strip()
             except EOFError:
                 user_input = ""
                 
             paper_title = user_input if user_input else "Attention Is All You Need"
-            print(f"\n👉 「{paper_title}」で検索を開始します...\n")
+            print(f"\n👉 「{paper_title}」の引用分析を開始します（時間がかかる場合があります）...\n")
 
             # 5. LLMに指示を出す
-            prompt = f"Semantic Scholarを使って「{paper_title}」という論文を検索し、それを引用している重要な論文を上位10件教えてください。"
+            prompt = f"Article Graph MCPツールを使って、「{paper_title}」という論文の引用分析を実行し、その結果（生成された出力や保存先など）をそのままユーザーに教えてください。"
             
             # 6. クラス化したメソッドを呼び出すだけで自動的にツール実行まで行われる
             await llm_client.execute_task(prompt=prompt, mcp_session=session)

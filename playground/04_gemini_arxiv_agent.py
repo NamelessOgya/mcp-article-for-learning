@@ -30,7 +30,7 @@ async def main():
     server_params = StdioServerParameters(
         command="python",
         # プロジェクトルートからの相対パス、または絶対パスで最新の配置場所を指定
-        args=[os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src", "mcp", "arxiv_mcp.py")],
+        args=[os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src", "mcp", "arxiv", "arxiv_mcp.py")],
     )
 
     print("🔌 ArXiv MCPサーバーを起動し、接続しています...")

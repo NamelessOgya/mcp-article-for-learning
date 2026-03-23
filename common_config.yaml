@@ -1,0 +1,3 @@
+# プロジェクト共通の設定
+PROJECT_NAME: "mcp-article-for-learning"
+# PROJECT_ROOTは各Pythonスクリプトで動的に定義されます (os.path.abspath(__file__) 等を使用)
